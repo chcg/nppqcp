@@ -29,22 +29,22 @@ namespace QuickColorPicker {
 
 	private:
 
-		HINSTANCE _instance;
-		HWND _parent_window;
-		HWND _mask_window;
-		HWND _info_window;
+		HINSTANCE _instance = NULL;
+		HWND _parent_window = NULL;
+		HWND _mask_window = NULL;
+		HWND _info_window = NULL;
 
-		bool _is_shown;
+		bool _is_shown = false;
 
-		HWND _zoom_area;
+		HWND _zoom_area = NULL;
 
-		HCURSOR _cursor;
+		HCURSOR _cursor = NULL;
 
 		bool _slow_mouse = false;
 		int _mouse_speed = 10;
 
-		COLORREF _old_color;
-		COLORREF _new_color;
+		COLORREF _old_color = 0;
+		COLORREF _new_color = 0;
 
 		void CreateMaskWindow();
 		static LRESULT CALLBACK MaskWindowWINPROC(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam);

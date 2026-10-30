@@ -42,7 +42,7 @@ const wchar_t _ini_key_highlight[] = L"highlight";
 const wchar_t _ini_file[] = L"nppqcp.ini";
 TCHAR _ini_file_path[MAX_PATH];
 
-struct ColorMarker { CSSColorParser::Color color; int start; int end; };
+struct ColorMarker { CSSColorParser::Color color; int start = 0; int end = 0; };
 ColorMarker _color_markers[MAX_COLOR_CODE_HIGHTLIGHT];
 int _color_marker_index = -1;
 
@@ -164,29 +164,36 @@ void InitCommandMenu() {
 	setCommand(index++, L"---", NULL, NULL, false);
 
 	// get version
-	WCHAR fileName[_MAX_PATH];
+	WCHAR fileName[_MAX_PATH]{};
 	DWORD size = GetModuleFileName(_instance, fileName, _MAX_PATH);
 	fileName[size] = NULL;
 	DWORD handle = 0;
 	size = GetFileVersionInfoSize(fileName, &handle);
 	BYTE* versionInfo = new BYTE[size];
-	wchar_t version[50];
-
-	if (!GetFileVersionInfo(fileName, handle, size, versionInfo)) {
-		delete[] versionInfo;
+	wchar_t version[50]{};
+	if (versionInfo)
+	{
+		if (!GetFileVersionInfo(fileName, handle, size, versionInfo)) {
+			delete[] versionInfo;
+			lstrcpy(version, L"Unknown");
+		}
+		else
+		{
+			UINT    			len = 0;
+			VS_FIXEDFILEINFO* vsfi = NULL;
+			VerQueryValue(versionInfo, L"\\", (void**)&vsfi, &len);
+			wsprintf(version, L"%d.%d.%d",
+				HIWORD(vsfi->dwFileVersionMS),
+				LOWORD(vsfi->dwFileVersionMS),
+				HIWORD(vsfi->dwFileVersionLS)
+			);
+			delete[] versionInfo;
+		}
+	}
+	else
+	{
 		lstrcpy(version, L"Unknown");
 	}
-
-	UINT    			len = 0;
-	VS_FIXEDFILEINFO*   vsfi = NULL;
-	VerQueryValue(versionInfo, L"\\", (void**)&vsfi, &len);
-	wsprintf(version, L"%d.%d.%d",
-		HIWORD(vsfi->dwFileVersionMS),
-		LOWORD(vsfi->dwFileVersionMS),
-		HIWORD(vsfi->dwFileVersionLS)
-	);
-	delete[] versionInfo;
-
 	// create visit website link
 	wchar_t text[200] = L"Visit NPPQCP Website ";
 	wcscat_s(text, L" (Version ");
@@ -351,10 +358,12 @@ LRESULT CALLBACK MessageWindowWinproc(HWND hwnd, UINT message, WPARAM wparam, LP
 		case WM_QCP_START_SCREEN_PICKER:
 		{
 			::SetWindowPos(nppData._nppHandle, HWND_BOTTOM, 0,0,0,0, SWP_NOMOVE|SWP_NOSIZE);
+			break;
 		}
 		case WM_QCP_END_SCREEN_PICKER:
 		{
 			::ShowWindow(nppData._nppHandle, SW_SHOW);
+			break;
 		}
 		default:
 		{
@@ -579,7 +588,7 @@ bool CheckSelectionForBracketColor(const HWND h_scintilla, const int start, cons
 
 	// check for validity 
 	int close_pos = start;
-	int buff_len = sizeof(buff);
+	int buff_len = std::size(buff) - 1;
 
 	for (int i = strlen(prefix) + 1; i < buff_len; i++) {
 		char ch = buff[i];
@@ -724,15 +733,15 @@ void LoadRecentColor(){
 
 	QuickColorPicker::RGBAColor colors[16];
 	COLORREF color;
-	wchar_t key[20];
-	wchar_t alpha[20];
+	wchar_t key[20]{};
+	wchar_t alpha[20]{};
 
 	for (int i=0; i<16; i++) {
 		swprintf_s(key, L"recent%d", i);
-		color = ::GetPrivateProfileInt(_ini_section, key, 0, _ini_file_path);		
+		color = ::GetPrivateProfileInt(_ini_section, key, 0, _ini_file_path);
 		colors[i] = QuickColorPicker::RGBAColor(color);
 		swprintf_s(key, L"recent%d_a", i);
-		color = ::GetPrivateProfileString(_ini_section, key, L"1", alpha, sizeof(alpha), _ini_file_path);
+		color = ::GetPrivateProfileString(_ini_section, key, L"1", alpha, std::size(alpha) - 1, _ini_file_path);
 		if (color > 0) {
 			colors[i].a = wcstof(alpha, nullptr);
 		}
@@ -917,8 +926,8 @@ void FindBracketColor(const HWND h_scintilla, const int start_position, const in
 		int range_end = target_pos + 45;
 		range_end = range_end > line_end ? line_end : range_end;
 
-		char buff[50]{};
-		int buff_length = sizeof(buff);
+		char buff[51]{};
+		int buff_length = std::size(buff) - 1;
 
 		Sci_TextRangeFull tr{};
 		tr.chrg.cpMin = target_pos;

@@ -12,44 +12,6 @@
 using namespace QuickColorPicker;
 
 ColorPicker::ColorPicker() {
-	
-	RGBAColor color = RGBAColor(0,0,0,1);
-
-	focus_on_show = true;
-
-	_instance = NULL;
-	_parent_window = NULL;
-	_color_popup = NULL;
-	
-	_message_window = NULL;
-
-	_pick_cursor = NULL;
-	_show_picker_cursor = false;
-
-	_old_color_found_in_palette = false;
-	_old_color = color;
-	_new_color = color;	
-
-	_old_color_row = -1;
-	_old_color_index = -1;
-
-	_previous_color = color;
-	_previous_row = -1;
-	_previous_index = -1;
-
-	_adjust_color = _old_color;
-	_adjust_preserved_hue = 0;
-	_adjust_preserved_saturation = 0;
-
-	_adjust_center_row = 0;
-	_adjust_row = -1;
-	_adjust_index = -1;
-	
-	_is_first_create = false;
-	_is_color_chooser_shown = false;
-
-	_pScreenPicker = NULL;
-
 }
 
 ColorPicker::~ColorPicker() {
@@ -541,8 +503,8 @@ void ColorPicker::DisplayNewColor(RGBAColor color){
 	HSLAColor hsl = rgb2hsl(color);
 
 	// output
-	wchar_t output[80];
-	swprintf(output, sizeof(output), L"#%hs / HSLA(%d,%d%%,%d%%,%.2g)", hex, round(hsl.h), round(hsl.s * 100), round(hsl.l * 100), hsl.a);
+	wchar_t output[80]{};
+	swprintf(output, std::size(output) , L"#%hs / HSLA(%d,%d%%,%d%%,%.2g)", hex, round(hsl.h), round(hsl.s * 100), round(hsl.l * 100), hsl.a);
 	::SetDlgItemText(_color_popup, IDC_COLOR_TEXT, output);
 
 	PaintColorCompareSwatch();

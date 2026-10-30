@@ -85,7 +85,7 @@ namespace QuickColorPicker {
 		ColorPicker();
 		~ColorPicker();
 
-		bool focus_on_show;
+		bool focus_on_show = true;
 
 		void Create(HINSTANCE instance, HWND parent, HWND message_window = NULL);
 
@@ -138,47 +138,47 @@ namespace QuickColorPicker {
 
 	protected:
 
-		HINSTANCE _instance;
-		HWND _parent_window;
-		HWND _color_popup;
+		HINSTANCE _instance = NULL;
+		HWND _parent_window = NULL;
+		HWND _color_popup = NULL;
 
-		RECT _parent_rc;
+		RECT _parent_rc{};
 
 	private:
 
-		HWND _message_window;
+		HWND _message_window = NULL;
 
-		HCURSOR _pick_cursor;
-		bool _show_picker_cursor;
+		HCURSOR _pick_cursor = NULL;
+		bool _show_picker_cursor = false;
 
-		bool _old_color_found_in_palette;
-		RGBAColor _old_color;
-		RGBAColor _new_color;
+		bool _old_color_found_in_palette = false;
+		RGBAColor _old_color = RGBAColor(0, 0, 0, 1);
+		RGBAColor _new_color = RGBAColor(0, 0, 0, 1);
 
 		RGBAColor _color_palette_data[PALETTE_ROW + 1][PALETTE_COLUMN + 1];
 		RGBAColor _recent_color_data[RECENT_ZONE_ROW*RECENT_ZONE_COLUMN];
 
-		RECT _rect_palette;
+		RECT _rect_palette {};
 
-		int _old_color_row;
-		int _old_color_index;
+		int _old_color_row = -1;
+		int _old_color_index = -1;
 
-		RGBAColor _previous_color;
-		int _previous_row;
-		int _previous_index;
+		RGBAColor _previous_color = RGBAColor(0, 0, 0, 1);
+		int _previous_row = -1;
+		int _previous_index = -1;
 
-		RECT _rect_adjust_buttons;
+		RECT _rect_adjust_buttons {};
 
 		RGBAColor _adjust_color_data[4][ADJUST_ZONE_ROW];
-		RGBAColor _adjust_color;
-		double _adjust_preserved_hue;
-		double _adjust_preserved_saturation;
-		int _adjust_center_row;
-		int _adjust_row;
-		int _adjust_index;
+		RGBAColor _adjust_color = RGBAColor(0, 0, 0, 1);
+		double _adjust_preserved_hue = 0;
+		double _adjust_preserved_saturation = 0;
+		int _adjust_center_row = 0;
+		int _adjust_row = -1;
+		int _adjust_index = -1;
 
-		bool _is_first_create;
-		bool _is_color_chooser_shown;
+		bool _is_first_create = false;
+		bool _is_color_chooser_shown = false;
 
 		static void PlaceWindow(const HWND hwnd, const RECT rc);
 
@@ -219,7 +219,7 @@ namespace QuickColorPicker {
 		void AdjustZoneMouseClick(const POINT p, bool is_right_button);
 
 		// screen color picker
-		ScreenPicker* _pScreenPicker;
+		ScreenPicker* _pScreenPicker = nullptr;
 		void StartPickScreenColor();
 		void EndPickScreenColor();
 

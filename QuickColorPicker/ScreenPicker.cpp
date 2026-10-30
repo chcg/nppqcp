@@ -13,17 +13,7 @@ constexpr auto IDK_SLOW_MOUSE = 102;
 
 using namespace QuickColorPicker;
 
-ScreenPicker::ScreenPicker(COLORREF color){
-
-	_instance = NULL;
-	_parent_window = NULL;
-	_mask_window = NULL;
-
-	_is_shown = false;
-
-	_old_color = color;
-	_new_color = 0;
-
+ScreenPicker::ScreenPicker(COLORREF color):_old_color(color) {
 }
 
 ScreenPicker::~ScreenPicker(){
@@ -295,7 +285,6 @@ void QuickColorPicker::ScreenPicker::ReduceMouseSpeed()
 		0,
 		(LPVOID)1,
 		SPIF_UPDATEINIFILE ||
-		SPIF_SENDCHANGE ||
 		SPIF_SENDWININICHANGE);
 
 }
@@ -306,7 +295,6 @@ void QuickColorPicker::ScreenPicker::RestoreMouseSpeed() const
 		0,
 		(LPVOID)(INT_PTR)_mouse_speed,
 		SPIF_UPDATEINIFILE ||
-		SPIF_SENDCHANGE ||
 		SPIF_SENDWININICHANGE);
 }
 
