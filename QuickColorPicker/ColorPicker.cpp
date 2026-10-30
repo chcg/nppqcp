@@ -106,7 +106,7 @@ void ColorPicker::SetHSLAColor(HSLAColor color) {
 	SetColor(rgb);
 }
 
-HSLAColor ColorPicker::GetHSLAColor() {
+HSLAColor ColorPicker::GetHSLAColor() const {
 	HSLAColor hsl = rgb2hsl(_old_color);
 	return hsl;
 }
@@ -128,7 +128,7 @@ bool ColorPicker::SetHexColor(const char* hex_str) {
 
 
 
-bool ColorPicker::GetHexColor(char* out_hex, int buffer_size) {
+bool ColorPicker::GetHexColor(char* out_hex, int buffer_size) const {
 
 	return rgb2hex(_old_color, out_hex, buffer_size);
 
@@ -158,7 +158,7 @@ void ColorPicker::SetRecentColor(const RGBAColor *colors){
 
 }
 
-void ColorPicker::GetRecentColor(RGBAColor *&colors){
+void ColorPicker::GetRecentColor(RGBAColor *&colors) const{
 
 	for (int i=0; i<RECENT_ZONE_COLUMN*RECENT_ZONE_ROW; i++) {
 		colors[i] = _recent_color_data[i];
@@ -449,7 +449,7 @@ BOOL ColorPicker::OnMouseClick(LPARAM lparam, bool is_right_button){
 
 }
 
-bool ColorPicker::PointInRect(const POINT p, const RECT rc) {
+bool ColorPicker::PointInRect(const POINT p, const RECT rc) const {
 	
 	return p.x>rc.left && p.x<rc.right && p.y>rc.top && p.y<rc.bottom;
 
@@ -462,7 +462,7 @@ void ColorPicker::PaintAll(){
 }
 
 // helper function
-void ColorPicker::DrawColorBlock(const HDC hdc, const RECT rc, const RGBAColor color, bool ignore_alpha)
+void ColorPicker::DrawColorBlock(const HDC hdc, const RECT rc, const RGBAColor color, bool ignore_alpha) const
 {
 	HBRUSH hbrush;
 	RGBAColor rgb = color;
@@ -482,7 +482,7 @@ void ColorPicker::DrawColorBlock(const HDC hdc, const RECT rc, const RGBAColor c
 
 }
 
-COLORREF ColorPicker::mixcolor(RGBAColor fgcolor, RGBAColor bkcolor) {
+COLORREF ColorPicker::mixcolor(RGBAColor fgcolor, RGBAColor bkcolor) const {
 	double r, g, b;
 	r = (fgcolor.r * fgcolor.a) + (bkcolor.r * (1.0 - fgcolor.a));
 	g = (fgcolor.g * fgcolor.a) + (bkcolor.g * (1.0 - fgcolor.a));
@@ -1109,7 +1109,7 @@ UINT_PTR CALLBACK ColorPicker::ColorChooserWINPROC(HWND hwnd, UINT message, WPAR
 /////////////////////////////////////////////////////////////////////
 
 
-bool ColorPicker::hex2rgb(const char* hex_str, RGBAColor* out_color) {
+bool ColorPicker::hex2rgb(const char* hex_str, RGBAColor* out_color) const {
 
 	// check length
 	size_t len = strlen(hex_str);
@@ -1149,7 +1149,7 @@ bool ColorPicker::hex2rgb(const char* hex_str, RGBAColor* out_color) {
 
 }
 
-bool ColorPicker::rgb2hex(const RGBAColor rgb, char* out_hex, int buffer_size) {
+bool ColorPicker::rgb2hex(const RGBAColor rgb, char* out_hex, int buffer_size) const {
 
 	// check length
 	if (buffer_size < 7) {
@@ -1163,7 +1163,7 @@ bool ColorPicker::rgb2hex(const RGBAColor rgb, char* out_hex, int buffer_size) {
 
 }
 
-HSLAColor ColorPicker::rgb2hsl(RGBAColor rgb){
+HSLAColor ColorPicker::rgb2hsl(RGBAColor rgb) const{
 	
 	double r, g, b, a;
 	r = (double)rgb.r / 255.0f;
@@ -1210,11 +1210,11 @@ HSLAColor ColorPicker::rgb2hsl(RGBAColor rgb){
 
 }
 
-RGBAColor ColorPicker::hsl2rgb(HSLAColor hsl){
+RGBAColor ColorPicker::hsl2rgb(HSLAColor hsl) const{
 	return hsl2rgb(hsl.h, hsl.s, hsl.l, hsl.a);
 }
 
-RGBAColor ColorPicker::hsl2rgb(double h0, double s0, double l0, float a0){
+RGBAColor ColorPicker::hsl2rgb(double h0, double s0, double l0, float a0) const{
 
 	int r, g, b;
 	double h, s, l, a;
@@ -1269,7 +1269,7 @@ RGBAColor ColorPicker::hsl2rgb(double h0, double s0, double l0, float a0){
 
 }
 
-double ColorPicker::calc_color(double c, double t1, double t2){
+double ColorPicker::calc_color(double c, double t1, double t2) const{
 	if (c < 0) c += 1.0f;
 	if (c > 1) c -= 1.0f;
 	if (6.0f * c < 1.0f) return t1 + (t2 - t1) * 6.0f * c;
@@ -1278,7 +1278,7 @@ double ColorPicker::calc_color(double c, double t1, double t2){
 	return t1;
 }
 
-int ColorPicker::round(double number) {
+int ColorPicker::round(double number) const {
 
     return (number >= 0) ? (int)(number + 0.5f) : (int)(number - 0.5f);
 

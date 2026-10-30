@@ -34,7 +34,7 @@ jobs:
       id: tagName
 
     - name: zip artifacts for x64
-      run: 7z a ${{ env.Projectname }}_${{ steps.tagName.outputs.tag }}_${{ matrix.build_platform }}.zip .\build\${{ matrix.build_platform }}\Release\${{ env.Projectname }}.dll
+      run: 7z a ${{ env.Projectname }}_${{ steps.tagName.outputs.tag }}_${{ matrix.build_platform }}.zip .\${{ matrix.build_platform }}\Release\${{ env.Projectname }}.dll
 
     - name: Archive artifacts for ${{ matrix.build_platform }}
       uses: actions/upload-artifact@v7

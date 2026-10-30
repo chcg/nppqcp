@@ -301,11 +301,11 @@ void QuickColorPicker::ScreenPicker::ReduceMouseSpeed()
 
 }
 
-void QuickColorPicker::ScreenPicker::RestoreMouseSpeed()
+void QuickColorPicker::ScreenPicker::RestoreMouseSpeed() const
 {
 	SystemParametersInfo(SPI_SETMOUSESPEED,
 		0,
-		(LPVOID)_mouse_speed,
+		(LPVOID)(INT_PTR)_mouse_speed,
 		SPIF_UPDATEINIFILE ||
 		SPIF_SENDCHANGE ||
 		SPIF_SENDWININICHANGE);

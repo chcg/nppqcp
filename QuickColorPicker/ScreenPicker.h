@@ -14,7 +14,7 @@ namespace QuickColorPicker {
 		~ScreenPicker();
 
 		void Create(HINSTANCE inst, HWND parent);
-		bool IsCreated() {
+		bool IsCreated() const {
 			return (_mask_window != NULL);
 		}
 
@@ -23,7 +23,7 @@ namespace QuickColorPicker {
 		void Start();
 		void End();
 
-		bool IsShow() {
+		bool IsShow() const {
 			return _is_shown;
 		}
 
@@ -60,7 +60,7 @@ namespace QuickColorPicker {
 		void SampleColor(int x, int y);
 
 		void ReduceMouseSpeed();
-		void RestoreMouseSpeed();
+		void RestoreMouseSpeed() const;
 	};
 
 }

@@ -54,14 +54,14 @@ namespace QuickColorPicker {
 			b = GetBValue(color);
 		}
 
-		inline bool operator==(RGBAColor rgba) {
+		inline bool operator==(RGBAColor rgba) const {
 			if (rgba.r == r && rgba.g == g && rgba.b == b && rgba.a == a)
 				return true;
 			else
 				return false;
 		}
 
-		inline operator COLORREF() {
+		inline operator COLORREF() const {
 			return RGB(r, g, b);
 		}
 
@@ -122,18 +122,18 @@ namespace QuickColorPicker {
 
 		// Other stuffs here
 		void SetColor(const RGBAColor color);
-		RGBAColor GetColor() {
+		RGBAColor GetColor() const {
 			return _old_color;
 		}
 
 		void SetHSLAColor(HSLAColor color);
-		HSLAColor GetHSLAColor();
+		HSLAColor GetHSLAColor() const;
 
 		bool SetHexColor(const char* hex_color);
-		bool GetHexColor(char* out_hex, int buffer_size);
+		bool GetHexColor(char* out_hex, int buffer_size) const;
 
 		void SetRecentColor(const RGBAColor* colors);
-		void GetRecentColor(RGBAColor* &colors);
+		void GetRecentColor(RGBAColor* &colors) const;
 
 
 	protected:
@@ -190,11 +190,11 @@ namespace QuickColorPicker {
 		BOOL OnMouseMove(LPARAM lparam);
 		BOOL OnMouseClick(LPARAM lparam, bool is_right_button);
 
-		bool PointInRect(const POINT p, const RECT rc);
+		bool PointInRect(const POINT p, const RECT rc) const;
 		void PaintAll();
 
-		void DrawColorBlock(const HDC hdc, const RECT rc, const RGBAColor color, bool ignore_alpha = false);
-		COLORREF mixcolor(RGBAColor fgcolor, RGBAColor bkcolor);
+		void DrawColorBlock(const HDC hdc, const RECT rc, const RGBAColor color, bool ignore_alpha = false) const;
+		COLORREF mixcolor(RGBAColor fgcolor, RGBAColor bkcolor) const;
 
 		// color preview
 		void PaintColorCompareSwatch();
@@ -228,14 +228,14 @@ namespace QuickColorPicker {
 		static UINT_PTR CALLBACK ColorChooserWINPROC(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam);
 
 		// helper functions
-		bool hex2rgb(const char* hex_str, RGBAColor* out_color);
-		bool rgb2hex(const RGBAColor rgb, char* out_hex, int buffer_size);
-		HSLAColor rgb2hsl(const RGBAColor rgb);
-		RGBAColor hsl2rgb(const HSLAColor hsl);
-		RGBAColor hsl2rgb(const double h, const double s, const double l, const float a);
-		double calc_color(double c, double t1, double t2);
+		bool hex2rgb(const char* hex_str, RGBAColor* out_color) const;
+		bool rgb2hex(const RGBAColor rgb, char* out_hex, int buffer_size) const;
+		HSLAColor rgb2hsl(const RGBAColor rgb) const;
+		RGBAColor hsl2rgb(const HSLAColor hsl) const;
+		RGBAColor hsl2rgb(const double h, const double s, const double l, const float a) const;
+		double calc_color(double c, double t1, double t2) const;
 
-		int round(double number);
+		int round(double number) const;
 
 	};
 
