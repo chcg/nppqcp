@@ -190,11 +190,11 @@ namespace QuickColorPicker {
 		BOOL OnMouseMove(LPARAM lparam);
 		BOOL OnMouseClick(LPARAM lparam, bool is_right_button);
 
-		bool PointInRect(const POINT p, const RECT rc) const;
+		static bool PointInRect(const POINT p, const RECT rc);
 		void PaintAll();
 
-		void DrawColorBlock(const HDC hdc, const RECT rc, const RGBAColor color, bool ignore_alpha = false) const;
-		COLORREF mixcolor(RGBAColor fgcolor, RGBAColor bkcolor) const;
+		static void DrawColorBlock(const HDC hdc, const RECT rc, const RGBAColor color, bool ignore_alpha = false);
+		static COLORREF mixcolor(RGBAColor fgcolor, RGBAColor bkcolor);
 
 		// color preview
 		void PaintColorCompareSwatch();
@@ -228,14 +228,14 @@ namespace QuickColorPicker {
 		static UINT_PTR CALLBACK ColorChooserWINPROC(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam);
 
 		// helper functions
-		bool hex2rgb(const char* hex_str, RGBAColor* out_color) const;
-		bool rgb2hex(const RGBAColor rgb, char* out_hex, int buffer_size) const;
-		HSLAColor rgb2hsl(const RGBAColor rgb) const;
-		RGBAColor hsl2rgb(const HSLAColor hsl) const;
-		RGBAColor hsl2rgb(const double h, const double s, const double l, const float a) const;
-		double calc_color(double c, double t1, double t2) const;
+		static bool hex2rgb(const char* hex_str, RGBAColor* out_color);
+		static bool rgb2hex(const RGBAColor rgb, char* out_hex, int buffer_size);
+		static HSLAColor rgb2hsl(const RGBAColor rgb);
+		static RGBAColor hsl2rgb(const HSLAColor hsl);
+		static RGBAColor hsl2rgb(const double h, const double s, const double l, const float a);
+		static double calc_color(double c, double t1, double t2);
 
-		int round(double number) const;
+		static int round(double number);
 
 	};
 
