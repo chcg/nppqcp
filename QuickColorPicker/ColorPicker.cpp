@@ -180,7 +180,7 @@ void ColorPicker::SetParentRect(RECT rc) {
 void ColorPicker::PlaceWindow(const HWND hwnd, const RECT rc) {
 
 	HMONITOR monitor = ::MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
-	MONITORINFO mi;
+	MONITORINFO mi{};
 	mi.cbSize = sizeof(MONITORINFO);
 	::GetMonitorInfo(monitor, (LPMONITORINFO)&mi);
 
@@ -223,7 +223,7 @@ void ColorPicker::Show() {
 
 }
 
-void ColorPicker::Hide() {
+void ColorPicker::Hide() const {
 
 	::ShowWindow(_color_popup, SW_HIDE);
 
@@ -384,7 +384,7 @@ void ColorPicker::OnInitDialog(){
 // WM_MOUSEMOVE
 BOOL ColorPicker::OnMouseMove(LPARAM lparam){
 	
-	POINT p;
+	POINT p{};
 	p.x = GET_X_LPARAM(lparam);
 	p.y = GET_Y_LPARAM(lparam);
 
@@ -431,7 +431,7 @@ BOOL ColorPicker::OnMouseMove(LPARAM lparam){
 // WM_LBUTTONUP
 BOOL ColorPicker::OnMouseClick(LPARAM lparam, bool is_right_button){
 
-	POINT p;
+	POINT p{};
 	p.x = GET_X_LPARAM(lparam);
 	p.y = GET_Y_LPARAM(lparam);
 
@@ -494,11 +494,11 @@ COLORREF ColorPicker::mixcolor(RGBAColor fgcolor, RGBAColor bkcolor) {
 // COLOR SWATCHES
 ///////////////////////////////////////////////////////////////////
 
-void ColorPicker::PaintColorCompareSwatch() {
+void ColorPicker::PaintColorCompareSwatch() const {
 	
 	// paint swatch /////////
 	HDC hdc_win = ::GetDC(_color_popup);
-	RECT rc;
+	RECT rc{};
 	HBRUSH brush;
 
 	// new color
@@ -643,7 +643,7 @@ void ColorPicker::SaveToRecentColor(RGBAColor color){
 
 void ColorPicker::PaintColorPalette(){
 	
-	RECT rc;
+	RECT rc{};
 
 	RGBAColor color;
 	HBRUSH hbrush;
@@ -700,11 +700,11 @@ void ColorPicker::PaintColorPalette(){
 
 }
 
-void ColorPicker::DrawColorHoverBox(int row, int index, bool is_hover) {
+void ColorPicker::DrawColorHoverBox(int row, int index, bool is_hover) const {
 
 	HDC hdc = ::GetDC(_color_popup);
 	HBRUSH hbrush;
-	RECT rc;
+	RECT rc{};
 	RGBAColor color;
 
 	color = _color_palette_data[row][index];
@@ -823,7 +823,7 @@ void ColorPicker::PaintAdjustZone(){
 
 	GenerateAdjustColors(_adjust_color);
 
-	RECT rc;
+	RECT rc{};
 	int base_x = PALETTE_WIDTH + CONTROL_PADDING*2;
 	int base_y = CONTROL_PADDING;
 
@@ -878,8 +878,8 @@ void ColorPicker::PaintAdjustZone(){
 
 }
 
-void ColorPicker::DrawAdjustZoneCenterRow(HDC hdc) {
-	RECT rc;
+void ColorPicker::DrawAdjustZoneCenterRow(HDC hdc) const {
+	RECT rc{};
 	rc.left = ADJUST_ZONE_X;
 	rc.right = rc.left + ADJUST_ZONE_WIDTH - ADJUST_ZONE_CELL_WIDTH;
 	rc.top = ADJUST_ZONE_Y + ADJUST_ZONE_CELL_HEIGHT*_adjust_center_row;
@@ -901,7 +901,7 @@ void ColorPicker::DrawAdjustZoneHoverBox(int row, int index, bool is_hover){
 	
 	HDC hdc = ::GetDC(_color_popup);
 	HBRUSH hbrush;
-	RECT rc;
+	RECT rc{};
 	RGBAColor color;
 
 	color = _adjust_color_data[index][row];

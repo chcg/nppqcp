@@ -5,12 +5,11 @@
 #include "ScreenPicker.h"
 #include "ColorPicker.res.h"
 
-#define MASK_WIN_CLASS L"nplus_screen_picker"
-#define INFO_WINDOW_WIDTH 224
-#define INFO_WINDOW_HEIGHT 140
-#define CONTROL_BORDER_COLOR 0x666666
-#define IDK_HIDE 101
-#define IDK_SLOW_MOUSE 102
+constexpr auto MASK_WIN_CLASS = L"nplus_screen_picker";
+constexpr auto INFO_WINDOW_WIDTH = 224;
+constexpr auto INFO_WINDOW_HEIGHT = 140;
+constexpr auto IDK_HIDE = 101;
+constexpr auto IDK_SLOW_MOUSE = 102;
 
 using namespace QuickColorPicker;
 
@@ -164,7 +163,7 @@ void ScreenPicker::SetColor(COLORREF color){
 void ScreenPicker::Start(){
 
 	HMONITOR monitor = ::MonitorFromWindow(_parent_window, MONITOR_DEFAULTTONEAREST);
-	MONITORINFO mi;
+	MONITORINFO mi{};
 	mi.cbSize = sizeof(MONITORINFO);
 	::GetMonitorInfo(monitor, (LPMONITORINFO)&mi);
 	int width = mi.rcMonitor.right - mi.rcMonitor.left;
@@ -226,7 +225,7 @@ void ScreenPicker::SampleColor(int x, int y){
 
 	// paint preview /////////////
 	HDC hdc_win = ::GetDC(_info_window);
-	RECT rc;
+	RECT rc{};
 	HBRUSH brush;
 	
 	// zoomed preview
@@ -356,7 +355,7 @@ BOOL ScreenPicker::InfoWindowMessageHandle(UINT message, WPARAM wparam, LPARAM l
 		}
 		case WM_MOUSEMOVE:
 		{
-			POINT p;
+			POINT p{};
 			p.x = GET_X_LPARAM(lparam);
 			p.y = GET_Y_LPARAM(lparam);
 			::ClientToScreen(_info_window, &p);
@@ -372,7 +371,7 @@ BOOL ScreenPicker::InfoWindowMessageHandle(UINT message, WPARAM wparam, LPARAM l
 }
 
 
-void ScreenPicker::PrepareInfoWindow(){
+void ScreenPicker::PrepareInfoWindow() const{
 
 	::SetWindowPos(_info_window, HWND_TOP, 0, 0, INFO_WINDOW_WIDTH, INFO_WINDOW_HEIGHT, SWP_HIDEWINDOW);
 	::SetWindowLongPtr(_info_window, GWL_EXSTYLE, WS_EX_TOOLWINDOW);
@@ -387,10 +386,10 @@ void ScreenPicker::PrepareInfoWindow(){
 
 }
 
-void ScreenPicker::PlaceInfoWindow(int x, int y) {
+void ScreenPicker::PlaceInfoWindow(int x, int y) const {
 
 	HMONITOR monitor = ::MonitorFromWindow(_parent_window, MONITOR_DEFAULTTONEAREST);
-	MONITORINFO mi;
+	MONITORINFO mi{};
 	mi.cbSize = sizeof(MONITORINFO);
 	::GetMonitorInfo(monitor, (LPMONITORINFO)&mi);
 

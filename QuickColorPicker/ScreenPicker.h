@@ -54,8 +54,8 @@ namespace QuickColorPicker {
 		static BOOL CALLBACK InfoWindowWINPROC(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam);
 		BOOL CALLBACK InfoWindowMessageHandle(UINT message, WPARAM wparam, LPARAM lparam);
 
-		void PrepareInfoWindow();
-		void PlaceInfoWindow(int x, int y);
+		void PrepareInfoWindow() const;
+		void PlaceInfoWindow(int x, int y) const;
 
 		void SampleColor(int x, int y);
 

@@ -111,7 +111,7 @@ namespace QuickColorPicker {
 		void SetParentRect(RECT rc);
 
 		void Show();
-		void Hide();
+		void Hide() const;
 
 		void ShowScreenPicker();
 
@@ -197,7 +197,7 @@ namespace QuickColorPicker {
 		static COLORREF mixcolor(RGBAColor fgcolor, RGBAColor bkcolor);
 
 		// color preview
-		void PaintColorCompareSwatch();
+		void PaintColorCompareSwatch() const;
 		void DisplayNewColor(RGBAColor color);
 
 		// palette
@@ -207,13 +207,13 @@ namespace QuickColorPicker {
 		void FillRecentColorData();
 
 		void PaintColorPalette();
-		void DrawColorHoverBox(int row, int index, bool is_hover = true);
+		void DrawColorHoverBox(int row, int index, bool is_hover = true) const;
 		void PaletteMouseMove(const POINT p);
 		void PaletteMouseClick(const POINT p, bool is_right_button);
 
 		void GenerateAdjustColors(RGBAColor color);
 		void PaintAdjustZone();
-		void DrawAdjustZoneCenterRow(HDC hdc);
+		void DrawAdjustZoneCenterRow(HDC hdc) const;
 		void DrawAdjustZoneHoverBox(int row, int index, bool is_hover = true);
 		void AdjustZoneMouseMove(const POINT p);
 		void AdjustZoneMouseClick(const POINT p, bool is_right_button);

@@ -27,14 +27,14 @@ FuncItem funcItem[COMMNAD_COUNT];
 bool doCloseTag;
 
 
-#define NPP_SUBCLASS_ID 101
-#define MAX_COLOR_CODE_HIGHTLIGHT 80
+constexpr auto NPP_SUBCLASS_ID = 101;
+constexpr auto MAX_COLOR_CODE_HIGHTLIGHT = 80;
 
-#define TYPE_RGB 1
-#define TYPE_RGBA 2
-#define TYPE_HSL 3
-#define TYPE_HSLA 4
-#define TYPE_HEX 5
+constexpr auto TYPE_RGB = 1;
+constexpr auto TYPE_RGBA = 2;
+constexpr auto TYPE_HSL = 3;
+constexpr auto TYPE_HSLA = 4;
+constexpr auto TYPE_HEX = 5;
 
 const wchar_t _ini_section[] = L"nppqcp";
 const wchar_t _ini_key_enable[] = L"enabled";
@@ -197,7 +197,7 @@ void InitCommandMenu() {
 
 }
 
-bool setCommand(size_t index, wchar_t *cmdName, PFUNCPLUGINCMD pFunc, ShortcutKey *sk, bool checkOnInit) {
+static bool setCommand(size_t index, wchar_t *cmdName, PFUNCPLUGINCMD pFunc, ShortcutKey *sk, bool checkOnInit) {
 
     if (index >= COMMNAD_COUNT)
         return false;
@@ -470,7 +470,7 @@ bool ShowColorPicker(){
 void PlaceColorPickerAt(HWND h_scintilla, int pos) {
 
 	// prepare coordinates
-	POINT p;
+	POINT p{};
 	p.x = ::SendMessage(h_scintilla, SCI_POINTXFROMPOSITION, 0, pos);
 	p.y = ::SendMessage(h_scintilla, SCI_POINTYFROMPOSITION, 0, pos);
 	::ClientToScreen(h_scintilla, &p);
@@ -478,7 +478,7 @@ void PlaceColorPickerAt(HWND h_scintilla, int pos) {
 	// all line height in scintilla is the same
 	int line_height = ::SendMessage(h_scintilla, SCI_TEXTHEIGHT, 0, 1);
 
-	RECT rc;
+	RECT rc{};
 	rc.top = p.y;
 	rc.right = p.x; // not used anyway
 	rc.bottom = p.y + line_height;
@@ -515,7 +515,7 @@ bool CheckSelectionForHexColor(const HWND h_scintilla, const int start, const in
 	_replace_end = end;
 
 	// get hex text - scintilla only accept char
-	char hex_str[10];
+	char hex_str[10]{};
     ::SendMessage(h_scintilla, SCI_GETSELTEXT, 0, (LPARAM)&hex_str);
 
 	// put current color to picker
@@ -543,7 +543,7 @@ bool CheckSelectionForBracketColor(const HWND h_scintilla, const int start, cons
 		return false;
 
 	// check for prefix
-	char prefix[8];
+	char prefix[8]{};
 	::SendMessage(h_scintilla, SCI_GETSELTEXT, 0, (LPARAM)&prefix);
 
 	if (strcmp(prefix,"rgb") == 0) {
@@ -563,19 +563,19 @@ bool CheckSelectionForBracketColor(const HWND h_scintilla, const int start, cons
 	}
 
 	// read in the whole string and parse
-	char buff[50];
+	char buff[50]{};
 
 	int line = ::SendMessage(h_scintilla, SCI_LINEFROMPOSITION, (WPARAM)start, 0);
 	int line_end = ::SendMessage(h_scintilla, SCI_GETLINEENDPOSITION, (WPARAM)line, 0);
 	int range_end = end + 45;
 	range_end = range_end > line_end ? line_end : range_end;
 
-	Sci_TextRange tr;
+	Sci_TextRangeFull tr{};
 	tr.chrg.cpMin = start;
 	tr.chrg.cpMax = range_end;
 	tr.lpstrText = buff;
 
-	::SendMessage(h_scintilla, SCI_GETTEXTRANGE, 0, (LPARAM)&tr);
+	::SendMessage(h_scintilla, SCI_GETTEXTRANGEFULL, 0, (LPARAM)&tr);
 
 	// check for validity 
 	int close_pos = start;
@@ -778,7 +778,7 @@ void HighlightColorCode() {
 	int lang = -100;
     ::SendMessage(nppData._nppHandle, NPPM_GETCURRENTLANGTYPE, 0, (LPARAM)&lang);
 
-	if (lang != L_CSS && lang != L_JS && lang != L_HTML) {
+	if (lang != L_CSS && lang != L_JAVASCRIPT && lang != L_HTML) {
         return;
     }
 
@@ -819,12 +819,12 @@ void FindHexColor(const HWND h_scintilla, const int start_position, const int en
 
     while (marker_not_full && search_start < end_position) {
 
-		Sci_TextToFind tf;
+		Sci_TextToFindFull tf{};
 		tf.chrg.cpMin = search_start;
 		tf.chrg.cpMax = end_position+1;
 		tf.lpstrText = "#";
 
-		int target_pos = ::SendMessage(h_scintilla, SCI_FINDTEXT, 0, (LPARAM)&tf);
+		int target_pos = ::SendMessage(h_scintilla, SCI_FINDTEXTFULL, 0, (LPARAM)&tf);
 
 		// not found
 		if(target_pos == -1) {
@@ -837,15 +837,15 @@ void FindHexColor(const HWND h_scintilla, const int start_position, const int en
 		int range_end = target_pos + 9;
 		range_end = range_end > line_end ? line_end : range_end;
 
-		char buff[10];
+		char buff[10]{};
 		int buff_length = sizeof(buff);
 
-		Sci_TextRange tr;
+		Sci_TextRangeFull tr{};
 		tr.chrg.cpMin = target_pos;
 		tr.chrg.cpMax = range_end;
 		tr.lpstrText = buff;
 
-		::SendMessage(h_scintilla, SCI_GETTEXTRANGE, 0, (LPARAM)&tr);
+		::SendMessage(h_scintilla, SCI_GETTEXTRANGEFULL, 0, (LPARAM)&tr);
 		
 		bool is_valid = false;
 
@@ -899,12 +899,12 @@ void FindBracketColor(const HWND h_scintilla, const int start_position, const in
 
 	while (marker_not_full && search_start < end_position) {
 
-		Sci_TextToFind tf;
+		Sci_TextToFindFull tf{};
 		tf.chrg.cpMin = search_start;
 		tf.chrg.cpMax = search_end;
 		tf.lpstrText = prefix;
 
-		int target_pos = ::SendMessage(h_scintilla, SCI_FINDTEXT, 0, (LPARAM)&tf);
+		int target_pos = ::SendMessage(h_scintilla, SCI_FINDTEXTFULL, 0, (LPARAM)&tf);
 
 		// not found
 		if (target_pos == -1) {
@@ -917,15 +917,15 @@ void FindBracketColor(const HWND h_scintilla, const int start_position, const in
 		int range_end = target_pos + 45;
 		range_end = range_end > line_end ? line_end : range_end;
 
-		char buff[50];
+		char buff[50]{};
 		int buff_length = sizeof(buff);
 
-		Sci_TextRange tr;
+		Sci_TextRangeFull tr{};
 		tr.chrg.cpMin = target_pos;
 		tr.chrg.cpMax = range_end;
 		tr.lpstrText = buff;
 
-		::SendMessage(h_scintilla, SCI_GETTEXTRANGE, 0, (LPARAM)&tr);
+		::SendMessage(h_scintilla, SCI_GETTEXTRANGEFULL, 0, (LPARAM)&tr);
 
 		bool is_valid = false;
 
@@ -1007,7 +1007,7 @@ void DrawColorMarkers(const HWND h_scintilla) {
 		return;
 
 	HDC hdc_editor = ::GetDC(h_scintilla);
-	RECT rc;
+	RECT rc{};
 	HBRUSH brush;
 
 	int list_length = _color_marker_index + 1;

@@ -125,15 +125,15 @@ float clamp_css_float(T f) {  // Clamp to float 0.0 .. 1.0.
     return f < 0 ? 0 : f > 1 ? 1 : f;
 }
 
-float parseFloat(const std::string& str) {
+static float parseFloat(const std::string& str) {
     return strtof(str.c_str(), nullptr);
 }
 
-int64_t parseInt(const std::string& str, uint8_t base = 10) {
+static int64_t parseInt(const std::string& str, uint8_t base = 10) {
     return strtoll(str.c_str(), nullptr, base);
 }
 
-uint8_t parse_css_int(const std::string& str) {  // int or percentage.
+static uint8_t parse_css_int(const std::string& str) {  // int or percentage.
     if (str.length() && str.back() == '%') {
         return clamp_css_byte(parseFloat(str) / 100.0f * 255.0f);
     } else {
@@ -141,7 +141,7 @@ uint8_t parse_css_int(const std::string& str) {  // int or percentage.
     }
 }
 
-float parse_css_float(const std::string& str) {  // float or percentage.
+static float parse_css_float(const std::string& str) {  // float or percentage.
     if (str.length() && str.back() == '%') {
         return clamp_css_float(parseFloat(str) / 100.0f);
     } else {
@@ -149,7 +149,7 @@ float parse_css_float(const std::string& str) {  // float or percentage.
     }
 }
 
-float css_hue_to_rgb(float m1, float m2, float h) {
+static float css_hue_to_rgb(float m1, float m2, float h) {
     if (h < 0.0f) {
         h += 1.0f;
     } else if (h > 1.0f) {
@@ -170,7 +170,7 @@ float css_hue_to_rgb(float m1, float m2, float h) {
 
 
 
-std::vector<std::string> split(const std::string& s, char delim) {
+static std::vector<std::string> split(const std::string& s, char delim) {
     std::vector<std::string> elems;
     std::stringstream ss(s);
     std::string item;
