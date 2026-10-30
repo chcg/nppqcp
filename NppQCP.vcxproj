@@ -375,9 +375,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="QuickColorPicker\picker.cur" />
-    <None Include="no_ms.props" />
-    <None Include="no_ms.vsprops" />
-    <None Include="NppQCP.vcproj" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="QuickColorPicker\picker.ico" />
