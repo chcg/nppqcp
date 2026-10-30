@@ -61,9 +61,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="NppQCP.vcproj" />
-    <None Include="no_ms.props" />
-    <None Include="no_ms.vsprops" />
     <None Include="QuickColorPicker\picker.cur">
       <Filter>Resource Files</Filter>
     </None>
